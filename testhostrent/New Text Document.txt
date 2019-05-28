@@ -1,0 +1,371 @@
+<?php
+ include('functions.php');
+session_start();
+if (isset($_SESSION['View'])) {
+   $c = $_GET['sta_a'];
+    // $c = implode(' ', $_SESSION['View']);
+     // print_r($c);
+         $query = 'SELECT  *  FROM agentupload WHERE frontview = :i'; 
+         $query = $conn->prepare($query);
+         $query -> bindParam(':i', $c);
+         $query-> execute();
+         $i = $query->fetchAll(PDO::FETCH_ASSOC);
+      
+         $i = $i[0];
+
+
+
+         $m =$i['ag_name'];
+
+         $queryn = 'SELECT * FROM agentdetail WHERE ag_fullname = :i'; 
+         $queryn= $conn->prepare($queryn);
+         $queryn -> bindParam(':i', $m);
+         $queryn-> execute();
+         $n = $queryn->fetchAll(PDO::FETCH_ASSOC);
+          $n = $n[0];
+
+    $stmt = $conn->prepare("SELECT * FROM bookings where booked_h_img = :m"); 
+    $stmt->execute([':m' => $c]);
+    $count = $stmt->rowCount();
+    $counts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          if ($counts=0){
+            $counts=0;
+          }else{
+             $counts = $counts[0];
+          }
+    $_SESSION['name'] = $counts['users_id'];
+
+
+}
+elseif (isset($_SESSION['View2'])) {
+// print_r(array_slice($a,2));
+  $c = $_GET['sta_a'];
+         $query = 'SELECT  *  FROM agentupload WHERE frontview = :i'; 
+         $query = $conn->prepare($query);
+         $query -> bindParam(':i', $c);
+         $query-> execute();
+         $i = $query->fetchAll(PDO::FETCH_ASSOC);
+         $i = $i[0];
+
+          $m =$i['ag_name'];
+
+         $queryn = 'SELECT * FROM agentdetail WHERE ag_fullname = :i'; 
+         $queryn= $conn->prepare($queryn);
+         $queryn -> bindParam(':i', $m);
+         $queryn-> execute();
+         $n = $queryn->fetchAll(PDO::FETCH_ASSOC);
+          $n = $n[0];
+
+        $stmt = $conn->prepare("SELECT * FROM bookings where booked_h_img = :m"); 
+    $stmt->execute([':m' => $c]);
+    $count = $stmt->rowCount();
+    $counts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+          if ($counts=0){
+            $counts=0;
+          }else{
+             $counts = $counts[0];
+          }
+
+    $_SESSION['name'] = $counts['users_id'];
+
+   
+}
+elseif (isset($_SESSION['Viewrs'])) {
+ $c = $_GET['sta_a'];
+         $query = 'SELECT  *  FROM agentupload WHERE frontview = :i'; 
+         $query = $conn->prepare($query);
+         $query -> bindParam(':i', $c);
+         $query-> execute();
+         $i = $query->fetchAll(PDO::FETCH_ASSOC);
+         $i = $i[0];
+
+          $m =$i['ag_name'];
+
+         $queryn = 'SELECT * FROM agentdetail WHERE ag_fullname = :i'; 
+         $queryn= $conn->prepare($queryn);
+         $queryn -> bindParam(':i', $m);
+         $queryn-> execute();
+         $n = $queryn->fetchAll(PDO::FETCH_ASSOC);
+          $n = $n[0];
+
+        $stmt = $conn->prepare("SELECT * FROM bookings where booked_h_img = :m"); 
+    $stmt->execute([':m' => $c]);
+    $count = $stmt->rowCount();
+    $counts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           if ($counts=0){
+            $counts=0;
+          }else{
+             $counts = $counts[0];
+          }
+
+    $_SESSION['name'] = $counts['users_id'];
+
+   
+}
+
+else{
+ header("Refresh: 2; url=index.php");
+}
+
+if (isset($_POST['booking'])) 
+{
+    if (isset($_SESSION['View'])) 
+    {
+        $c = $_SESSION['View'];
+    }
+   elseif (isset($_SESSION['View2'])) 
+   {
+        $c = $_SESSION['View2'];
+   }
+
+$m = (int)$_SESSION['idcollector'];
+ $query = 'SELECT fullname FROM student WHERE s_id = :i'; 
+ $query = $conn->prepare($query);
+ $query -> bindParam(':i', $m);
+ $query-> execute();
+ $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$full = $result[0]['fullname'];
+
+
+
+
+
+
+
+
+
+
+
+    $query = "INSERT INTO bookings(booked_h_img,users_id)
+        values (:p,:f )";
+      $query = $conn->prepare($query);
+      $query->execute([
+          ':p' =>  $c,
+            ':f' => $full
+         
+          
+          
+      ]); 
+
+    if ($query) {
+      
+      header("Refresh: 2; url=estate-property.php");
+      
+    }
+
+}
+
+
+?>
+ <?php include ('includes/head.php');?>
+<body>
+
+ <?php 
+ include ('includes/header2.php');
+ ?>
+<!-- MAIN WRAPPER -->
+<br>
+<br>
+<br>
+<div class="body">
+   
+    <section class="slice bg-white bb">
+        <div class="wp-section estate">
+            <div class="container">
+                <div class="row">        
+                    <div class="col-md-12">
+                       <div class="row">
+                           <div class="col-md-8">
+                                <div class="product-gallery">
+                                    <div class="primary-image">
+                                        <a href="<?php echo'Agent/'.$i['frontview'].'';?>"  class="theater" rel="group">
+
+                                            <img src="<?php echo'Agent/'.$i['frontview'].'';?>" class="img-responsive img-center" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="owl-carousel owl-carousel-5 thumbnail-images style-2">
+                                        <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['innerview1'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['innerview1'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['rightsideview'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['rightsideview'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                       <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['leftsideview'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['leftsideview'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['backview'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['backview'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                         <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['innerview1'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['innerview1'].'';?>" alt="">
+                                            </a>
+                                        </div>  <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['innerview2'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['innerview2'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                          <div class="item">
+                                            <a href="<?php echo'Agent/'.$i['innerview3'].'';?>"  class="theater" rel="group">
+                                                <img src="<?php echo'Agent/'.$i['innerview3'].'';?>" alt="">
+                                            </a>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                         
+                            <div class="col-md-4">
+                                <div class="product-info">
+
+                                    <h3>Full Details</h3>
+                                    <div class="wp-block property list no-border">
+                                        <div class="wp-block-content clearfix">
+                                            <small>10 days only</small>
+                                            <h4 class="content-title">Special Offer</h4>
+                                           
+                                            <span class="pull-left">
+                                                <span class="price">#N <?php print $i['amount']; ?></span> 
+                                                <span class="period">per/year</span>
+                                            </span>
+                                            <span class="pull-right">
+                                                <span class="capacity">
+                                                    <i class="fa fa-user"></i>
+                                                    <i class="fa fa-user"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                       <hr>
+                                         <div class="product-short-info">
+                                                <p><i class="fa fa-inbox"></i><strong> Category</strong>: <?php print $i['category']; ?> Area</p>
+                                                <p><i class="fa fa-check"></i><strong> Address</strong>: <?php print $i['address']; ?></p>
+                                                
+                                        </div>
+                                         <hr>
+
+                                         <hr>
+                                        <div class="wp-block-footer style2 mt-15">
+                                            <ul class="aux-info">
+                                                <li><i class="fa fa-building"></i>2300 Sq Feet</li>
+                                                <li><i class="fa fa-user"></i> <?php print $i['noofbedroom']; ?> Bedrooms</li>
+                                                <li><i class="fa fa-tint"></i><?php print $i['noofbathtoi']; ?> Bathrooms</li>
+                                                
+
+                                                
+                                            </ul>  </div>
+                                             <div class="wp-block-footer style2 mt-15">
+                                            <ul class="aux-info">
+                                    
+                                                <li><i class="fa fa-tint"></i><?php print  $count; ?> No of Bookings</li>
+                                                <li><i class="fa fa-eye"></i><?php print $i['noofbathtoi']; ?> No of Views</li>
+
+                                                
+                                            </ul>  </div>
+                                            
+                                            <form action="estate-property.php" method="post">
+                                               <button name="booking" class="btn btn-sm btn-base btn-icon btn-cart pull-right">  
+                                               <span>Book</span>
+                                               </button> 
+
+                                            </form>
+
+                                               
+                                           
+                                       
+
+                                    </div>
+                                    
+                                    
+                                  
+                                    
+                                </div>
+                            
+                        </div>
+
+                        <!-- PROPERTY DESCRIPTION -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="tabs-framed boxed">
+                                    <ul class="tabs clearfix">
+                                        <li class="active"><a href="#tab-1" data-toggle="tab">Additional details</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="tab-1">
+                                            <div class="tab-body">
+                                                <div class="section-title-wr">
+                                                    <h3 class="section-title left">Property description</h3>
+                                                </div>
+                                                 <p class="description mb-15">
+                                                   <?php print $i['description']; ?>. 
+                                                </p>
+
+                                                <div class="section-title-wr">
+                                                    <h3 class="section-title left">Additional details</h3>
+                                                </div>
+                                                <table class="table table-bordered table-striped table-hover table-responsive">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>Property Size:</strong> 2300 Sq Ft</td>
+                                                            <td><strong>Rooms:</strong> <?php print $i['noofbedroom']; ?></td>
+                                                            <td><strong>Price:</strong> #N <?php print $i['amount']; ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            
+                                                            <td><strong>Bedrooms:</strong><?php print $i['noofbedroom']; ?></td>
+                                                            <td><strong>Bathrooms:</strong> <?php print $i['noofbathtoi']; ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Access to Water:</strong> Far or Not Far</td>
+                                                            <td><strong>Roofing:</strong> New</td>
+                                                            <td><strong>Structure Type:</strong> Blocks</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Type Of House :</strong> <?php print $i['rentcategory']; ?></td>
+                                                            <td><strong>Available from:</strong> Later 4rm Database</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="section-title-wr">
+                                                    <h3 class="section-title left">Link Up With Agent</h3>
+                                                </div>
+                                                <table class="table table-bordered table-striped table-hover table-responsive">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong><strong>Agent Name:</strong>  <?php print $n
+                                                            ['ag_fullname']; ?>.</td>
+                                                           <td><strong>Agent Mobile No:</strong>  <?php print $n
+                                                            ['ag_phone']; ?></td>
+                                                            <td><strong>Email Address:</strong> <?php print $n
+                                                            ['ag_email']; ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                             <strong>Office Address:</strong> <?php print $n
+                                                            ['ag_address']; ?> 
+                                                            
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                </div>
+            </div>
+        </div>
+    </section> <?php include ('includes/footer.php');?>
+    </div>
+</body>

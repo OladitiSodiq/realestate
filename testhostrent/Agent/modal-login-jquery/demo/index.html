@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Modal Login Window Demo</title>
+  <link rel="shortcut icon" href="http://designshack.net/favicon.ico">
+  <link rel="icon" href="http://designshack.net/favicon.ico">
+  <link rel="stylesheet" type="text/css" media="all" href="style.css">
+  <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/jquery.leanModal.min.js"></script>
+  <!-- jQuery plugin leanModal under MIT License http://leanmodal.finelysliced.com.au/ -->
+</head>
+
+<body>
+  <div id="topbar"><a href="http://designshack.net">Back to Design Shack</a></div>
+  <div id="w">
+    <div id="content">
+      <h1>Welcome to the Site!</h1>
+      <p>Just click the login link below to expand the modal window. This is only a demo so the input form will not load anything, but it is easy to connect into a backend system.</p>
+      <center><a href="#loginmodal" class="flatbtn" id="modaltrigger">Modal Login</a></center>
+    </div>
+  </div>
+  <div id="loginmodal" style="display:none;">
+   
+    <form id="loginform" name="loginform" method="post" action="index.html">
+     <div  class="text-center">
+              <input type="hidden" name="idp_form_id" value=<?php print $idp_id; ?>>
+              <input type="submit" name="delete_idp" class="btn btn-danger" value="YES">
+            <a href="all_idp.php"><button class="btn btn-success"> NO </button></a>
+            </div>
+    </form>
+  </div>
+<script type="text/javascript">
+$(function(){
+  $('#loginform').submit(function(e){
+    return false;
+  });
+  
+  $('#modaltrigger').leanModal({ top: 110, overlay: 0.45, closeButton: ".hidemodal" });
+});
+</script>
+</body>
+</html>
